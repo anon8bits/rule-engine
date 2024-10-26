@@ -1,0 +1,30 @@
+# Ignore node_modules directories
+backend/node_modules/
+frontend/node_modules/
+
+# Ignore build directories
+backend/build/
+frontend/build/
+
+# Ignore log files
+backend/logs/
+frontend/logs/
+
+# Ignore environment variable files
+backend/.env
+frontend/.env
+
+# Ignore temporary files
+*.tmp
+*.swp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+rule_engine.db
+backend/__pycache__/
