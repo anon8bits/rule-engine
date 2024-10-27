@@ -1,20 +1,27 @@
-FROM nikolaik/python-nodejs:python3.11-nodejs20
+# Start with a base image that has Python and Node.js
+FROM python:3.11-slim AS base
 
-WORKDIR /app
+# Install Node.js
+RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
 
-# Install backend dependencies
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Supervisor to manage multiple processes
+RUN apt-get update && apt-get install -y supervisor
 
-# Copy backend code
+# Copy supervisor configuration file
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Setup Backend
+WORKDIR /app/backend
 COPY backend/ .
+RUN pip install -r requirements.txt
 
-# Copy frontend files and install dependencies
-COPY frontend/ ./frontend/
+# Setup Frontend
 WORKDIR /app/frontend
+COPY frontend/ .
 RUN npm install
 
-# Back to app root
-WORKDIR /app
-
+# Expose the necessary ports
 EXPOSE 8000 3000
+
+# Start Supervisor
+CMD ["/usr/bin/supervisord"]
